@@ -1,0 +1,20 @@
+package main
+
+import "fmt"
+
+func main() {
+	cmd := parseCmd()
+
+	if cmd.versionFlag {
+		fmt.Println("version 0.0.1")
+	} else if cmd.helpFlag || cmd.class == "" {
+		printUsage()
+	} else {
+		startJVM(cmd)
+	}
+}
+
+func startJVM(cmd *Cmd) {
+	fmt.Printf("option:%s class:%s args:%s\n",
+		cmd.cpOption, cmd.class, cmd.args)
+}
