@@ -26,22 +26,38 @@ type DirEntry struct {
 // 只要一个结构体含有接口类型中的所有方法，那么这个结构体就实现这个接口
 // 而如果它只实现了某些个方法，则这个结构体没有实现这个接口
 // 如果接口没有实现，则这些定义的方法会成为结构体的方法（即方法与结构体实例绑定）
-//
+
 // golang 的函数与方法
-// 由于 golang 并不是面向对象的语言，故它无法实现类。但和 C 一样，它可以实现方法（即将函数与一个实例绑定）
+// 由于 golang 并不是面向对象的语言，但可以通过实现方法（即将函数与一个实例绑定）来实现类似 class 的行为操作
+// 它有一个特殊的接收者（receiver）类型，该接收者放在 func 关键字和函数名之间
+// 接收者可以是结构体类型或非结构体类型，可以是值或者指针并可以在方法内部访问接收者
 //
 // golang 方法的实现
 // 通过将一个函数与实例的绑定，我们可以创建 golang 中的方法，其语法为：
 // `func (t T) funcName() [return type] { ... }`
 // 其中 "(t T)" 为该函数的【接收者】，即函数的绑定者，它可以是一个值 "(t T)" 或一个指针 "(t *T)"
 //
-// ##### golang 值接收者 Value Receiver #####
-// 声明：func (u User) notify() { ... }
-// 调用：
+// golang 方法的调用
+// 通过方法可以实现类似 class 的操作，如 func (s *Square) Scale() { s.length = 5 } 后
+// 便可通过结构体 Square 的任何实例去调用该方法，如：mySquare.Scale()
+// 根据 golang 的指针特性，mySquare.Scale() 实际会被解释器转换为 (*mySquare).Scale()
+
+// 范例：
+// type Square struct { length int }
+// func (s Square) Scale1() { s.length = 5 }
+// func (s *Square) Scale2() { s.length = 5 }
 //
-// ##### golang 指针接收者 Value Receiver #####
-// 声明：func (u *User) notify() { ... }
-// 调用：
+// ##### 值接收者 Value Receiver #####
+// 值接收者再被调用时会对对象进行一个拷贝，故其不会改变原有对象的值，如：
+// square := Square{ length: 1 }（创建变量 square，非指针）
+// square.Scale1()
+// fmt.Println(square.length) （仍为 1，因为 Scale1 为值接收者，它基于变量 square 拷贝了一个新的 Square 结构体变量）
+//
+// ##### 指针接收者 Value Receiver #####
+// 指针接收者会直接使用对象的引用，故能够在指针接收者方法中对对象进行修改
+// square := &Square{ length: 1 }（创建指针 square）
+// square.Scale2()
+// fmt.Println(square.length) （输出 5，因为 Scale2 为指针接收者，直接使用了实例的引用 square）
 //
 
 func newDirEntry(path string) *DirEntry {
