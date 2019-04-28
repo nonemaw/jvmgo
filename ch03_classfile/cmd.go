@@ -6,22 +6,6 @@ import (
 	"os"
 )
 
-// 在这里我们需要实现三种 java classpath 类路径（Oracle JVM）：
-// bootstrap classpath 路径为 jre/lib
-// extension classpath 路径为 jre/lib/ext
-// user classpath      路径自定义
-// 在需要的情况下，可以通过 JVM -Xbootclasspath 选项来修改启动与扩展路径
-//
-// user classpath 默认为当前路径，CLASSPATH 变量值，或启动选项 -classpath/-cp 直接指定
-// -classpath/-cp 选项可以指定一个或多个目录/zip/jar 文件，或通过 `*` 加载目录下所有 jar 文件，如：
-// `java -cp path\to\lib1.jar`
-// `java -cp path\to\classes;lib\a.jar;lib\b.jar;lib\c.zip`
-// `java -cp classes;lib\*`
-// （分隔符因系统而定，Win 为 `;`，类 UNIX 为 `:`）
-
-
-// 在此首先需要让 Cmd 能够加载标准库的类，因此需要通过某种方式来指定 jre 目录未知
-// 故我们新增一个自定义选项：-Xjre，并在 Cmd 中添加该字段
 type Cmd struct {
 	helpFlag    bool
 	versionFlag bool

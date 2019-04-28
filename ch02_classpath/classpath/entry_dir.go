@@ -46,14 +46,14 @@ type DirEntry struct {
 // square1 := Square{1}  // 变量
 // square2 := &Square{1} // 指针
 //
-// square1.ScaleV()    // 实例变量直接调用 value receiver
-// (*square2).ScaleV() // 获取指针指向的实例本身，再调用 value receiver，且可以缩写为 square2.ScaleV()
-// (&square1).ScaleP() // 获取变量指针再调用 pointer receiver，且可以缩写为  square1.ScaleP()
+// square1.ScaleV()    // 实例变量调用 value receiver
+// square2.ScaleV()    // 指针调用 value receiver，完整语法为 (*square2).ScaleV() 先获得指针指向的实例再调用 value receiver
+// square1.ScaleP()    // 实例变量调用 pointer receiver，完整语法为 (&square1).ScaleP() 先获得变量的指针再调用 pointer receiver
 // square2.ScaleP()    // 指针调用 pointer receiver
 //
 // 思考：为什么下述也可以调用？
-// (&square1).ScaleV() // 因为解释器会自动补全，将它等同于 (*(&square1)).ScaleV()
-// (*square2).ScaleP() // 同上，等同于 (&(*square2)).ScaleP()
+// (&square1).ScaleV() // 因为解释器会自动补全，等同于指针调用 value receiver：(*(&square1)).ScaleV()
+// (*square2).ScaleP() // 同上，等同于实例变量调用 pointer receiver：(&(*square2)).ScaleP()
 
 func newDirEntry(path string) *DirEntry {
 	dir, err := filepath.Abs(path) // 将相对路径转换为绝对路径
