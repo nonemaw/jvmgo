@@ -47,7 +47,7 @@ type Cmd struct {
 // 关于通过结构体指针来引用值，假设我要调用结构体变量 helpFlag
 // (*cmd).helpFlag   标准调用方式，即获得结构体本身然后调用其 helpFlag
 // cmd.helpFlag      精简调用方式，等同于 (*cmd).helpFlag，解释器会自动补全
-// &(cmd.helpFlag)   获得结构体的 helpFlag 变量的地址，等同于 &((*cmd)cmd.helpFlag)
+// &(cmd.helpFlag)   获结构体的 helpFlag 变量的地址（即匿名指针），等同于 &((*cmd)cmd.helpFlag)
 // &cmd.helpFlag     等同于 &(cmd.helpFlag)，"." 的优先级大于 "&"
 func parseCmd() *Cmd {
 	cmd := &Cmd{}

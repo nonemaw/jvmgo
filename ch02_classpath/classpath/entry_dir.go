@@ -32,33 +32,28 @@ type DirEntry struct {
 // 它有一个特殊的接收者（receiver）类型，该接收者放在 func 关键字和函数名之间
 // 接收者可以是结构体类型或非结构体类型，可以是值或者指针并可以在方法内部访问接收者
 //
-// golang 方法的实现
-// 通过将一个函数与实例的绑定，我们可以创建 golang 中的方法，其语法为：
-// `func (t T) funcName() [return type] { ... }`
+// 接受者 Receiver
+// 通过将一个函数与实例的绑定，我们可以创建 golang 中的方法，其语法为：`func (t T) funcName() [return type] { ... }`
 // 其中 "(t T)" 为该函数的【接收者】，即函数的绑定者，它可以是一个值 "(t T)" 或一个指针 "(t *T)"
+// 值接收者 Value Receiver：(t T) 值接收者再被调用时会对对象进行一个拷贝，故其不会改变原有对象的值
+// 指针接收者 Value Receiver：(t *T) 指针接收者会直接使用对象的引用，故能够在指针接收者方法中对对象进行修改
 //
-// golang 方法的调用
-// 通过方法可以实现类似 class 的操作，如 func (s *Square) Scale() { s.length = 5 } 后
-// 便可通过结构体 Square 的任何实例去调用该方法，如：mySquare.Scale()
-// 根据 golang 的指针特性，mySquare.Scale() 实际会被解释器转换为 (*mySquare).Scale()
-
-// 范例：
-// type Square struct { length int }
-// func (s Square) Scale1() { s.length = 5 }
-// func (s *Square) Scale2() { s.length = 5 }
+// 通过 receiver 对函数进行绑定可以实现类似 class 的操作，如：
+// func (s *Square) Scale() { s.length = 5 } （将函数 Scale() 与结构体指针 *Square 绑定）
+// 这样任意一个 Square 结构体的指针或变量都可以访问该方法，并且基于 golang 的简化语法可以实现相互调用（如一个指针去调用 value receiver）
+// func (square Square) ScaleV()  { ... } // 值 receiver
+// func (square *Square) ScaleP() { ... } // 指针 receiver
+// square1 := Square{1}  // 变量
+// square2 := &Square{1} // 指针
 //
-// ##### 值接收者 Value Receiver #####
-// 值接收者再被调用时会对对象进行一个拷贝，故其不会改变原有对象的值，如：
-// square := Square{ length: 1 }（创建变量 square，非指针）
-// square.Scale1()
-// fmt.Println(square.length) （仍为 1，因为 Scale1 为值接收者，它基于变量 square 拷贝了一个新的 Square 结构体变量）
+// square1.ScaleV()    // 实例变量直接调用 value receiver
+// (*square2).ScaleV() // 获取指针指向的实例本身，再调用 value receiver，且可以缩写为 square2.ScaleV()
+// (&square1).ScaleP() // 获取变量指针再调用 pointer receiver，且可以缩写为  square1.ScaleP()
+// square2.ScaleP()    // 指针调用 pointer receiver
 //
-// ##### 指针接收者 Value Receiver #####
-// 指针接收者会直接使用对象的引用，故能够在指针接收者方法中对对象进行修改
-// square := &Square{ length: 1 }（创建指针 square）
-// square.Scale2()
-// fmt.Println(square.length) （输出 5，因为 Scale2 为指针接收者，直接使用了实例的引用 square）
-//
+// 思考：为什么下述也可以调用？
+// (&square1).ScaleV() // 因为解释器会自动补全，将它等同于 (*(&square1)).ScaleV()
+// (*square2).ScaleP() // 同上，等同于 (&(*square2)).ScaleP()
 
 func newDirEntry(path string) *DirEntry {
 	dir, err := filepath.Abs(path) // 将相对路径转换为绝对路径
