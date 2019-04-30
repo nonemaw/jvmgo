@@ -23,6 +23,11 @@ type Cmd struct {
 	args     []string // 主类参数
 }
 
+// 关于 golang 的访问控制
+// golang 中的访问控制只有 public 和 private 两种：
+// 所有首字母大写的类型、结构体、变量、函数等都是 public 的，可以在任意包 import
+// 所有首字母小写的都是 private，仅能在在包内使用
+
 // 关于变量赋值，go 解释器允许隐藏类型声明，解释器会自动基于值的类型隐式为变量声明类型
 // ":=" 被称为 “短式变量声明 Short variable declarations”
 // a := "b" 等同于 var a string = "b" 或 var a ="b"

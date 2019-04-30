@@ -21,7 +21,8 @@ func newZipEntry(path string) *ZipEntry {
 
 // ZipEntry 结构体实现 Entry 接口 readClass() 方法
 // 从 zip 文件进行遍历并提取与 class Name 同名的 class 文件
-// 这里可以看到，目前每一次寻找 class 文件时都需要遍历，这里可以进行优化
+// 这里可以看到，目前每一次寻找 class 文件时都需要遍历
+// TODO: 可以优化
 func (self *ZipEntry) readClass(className string) ([]byte, Entry, error) {
 	r, err := zip.OpenReader(self.absPath) // 尝试打开 zip 文件，如果出错则直接返回
 	if err != nil {
