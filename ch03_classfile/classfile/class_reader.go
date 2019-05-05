@@ -56,6 +56,13 @@ func (self *ClassReader) readUint16s() []uint16 {
 	return res
 }
 
+// 读取 uint32 4 个字节
+func (self *ClassReader) readUint32() uint32 {
+	val := binary.BigEndian.Uint32(self.data)
+	self.data = self.data[4:]
+	return val
+}
+
 // 每次读取 u8 8 个字节
 func (self *ClassReader) readUint64() uint64 {
 	val := binary.BigEndian.Uint64(self.data)
